@@ -53,7 +53,7 @@
                                   variant="tonal"
                                   icon="mdi-minus"
                                   class="mb--2"
-                                  @click="proxyModel.value = Math.max(0, proxyModel.value - 1)"
+                                  @click="proxyModel.value = Math.max(0, proxyModel.value - food[0].unitNumber)"
                                 />
                               </template>
                               <template #default>
@@ -74,7 +74,7 @@
                                   variant="tonal"
                                   class="mb--2"
                                   icon="mdi-plus"
-                                  @click="proxyModel.value += 1"
+                                  @click="proxyModel.value += food[0].unitNumber"
                                 />
                               </template>
                             </v-input>
@@ -135,7 +135,7 @@
                     variant="tonal"
                     icon="mdi-minus"
                     class="mb--2"
-                    @click="formFoodNumber = Math.max(0, formFoodNumber - 1)"
+                    @click="formFoodNumber = Math.max(0, formFoodNumber - (formFood ? foods.find(food => food.name === formFood)?.unitNumber! : 1))"
                   />
                 </template>
                 <template #default>
@@ -156,7 +156,7 @@
                     variant="tonal"
                     class="mb--2"
                     icon="mdi-plus"
-                    @click="formFoodNumber += 1"
+                    @click="formFoodNumber += (formFood ? foods.find(food => food.name === formFood)?.unitNumber! : 1)"
                   />
                 </template>
               </v-input>
@@ -244,7 +244,7 @@ function copyInfo() {
   store.nowFoods.forEach(food => {
     result += `${ padString(food[0].name + " ", 7, "—") } ${ food[1] }${ food[0].unitName }\n`;
   });
-  result += `\n总计：${ store.nowFoods.reduce((acc, cur) => acc + cur[0].unitPrice * cur[1], 0) }元`;
+  result += `\n总计：${ store.nowFoods.reduce((acc, cur) => acc + cur[0].unitPrice * (cur[1] / cur[0].unitNumber), 0) }元`;
   navigator.clipboard.writeText(result);
   snackbar.value = true;
 }
